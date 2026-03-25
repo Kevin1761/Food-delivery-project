@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Merchant Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background: linear-gradient(135deg, #ffcc33, #ff9800);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 960px;
+            padding: 24px 20px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            padding: 20px 22px 24px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+        }
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #ffb347;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px;
+            margin-right: 10px;
+        }
+        .brand-text-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+        .brand-text-sub {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #999;
+        }
+        .user-info {
+            text-align: right;
+            font-size: 13px;
+            color: #555;
+        }
+        .user-info strong {
+            color: #333;
+        }
+        .content-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .tips {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        th {
+            background: #fff8e1;
+            font-weight: 600;
+        }
+        tr:nth-child(even) td {
+            background: #fffdf5;
+        }
+        .status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            color: #fff;
+        }
+        .status-pending { background: #ffb300; }
+        .status-doing { background: #42a5f5; }
+        .status-done { background: #66bb6a; }
+        .footer {
+            margin-top: 12px;
+            font-size: 11px;
+            color: rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: #555;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            color: #333;
+            box-shadow: 0 6px 16px rgba(255, 179, 71, 0.45);
+        }
+        @media (max-width: 768px) {
+            .card { padding: 18px 16px 18px; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 6px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <div class="brand">
+                <div class="brand-logo">🏪</div>
+                <div>
+                    <div class="brand-text-title">FastFood Merchant</div>
+                    <div class="brand-text-sub">Manage your orders and menu</div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div>Logged in as: <strong id="merchantEmail">Merchant</strong></div>
+                <div>Role: Merchant</div>
+            </div>
+        </div>
+
+        <div class="content-title">Today's Orders (Demo)</div>
+        <div class="tips">下面是一个演示用的商家订单列表页面，你可以在这里扩展真正的订单查询、接单、配送等功能。</div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>#1001</td>
+                <td>Alice</td>
+                <td>Fried Chicken x2</td>
+                <td>$18.50</td>
+                <td><span class="status-tag status-pending">Pending</span></td>
+            </tr>
+            <tr>
+                <td>#1002</td>
+                <td>Bob</td>
+                <td>Burger Combo x1</td>
+                <td>$9.99</td>
+                <td><span class="status-tag status-doing">In Progress</span></td>
+            </tr>
+            <tr>
+                <td>#1003</td>
+                <td>Carol</td>
+                <td>Pizza x1, Cola x2</td>
+                <td>$22.30</td>
+                <td><span class="status-tag status-done">Completed</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <button class="btn btn-outline" onclick="goBackToLogin()">Back to Login</button>
+            <button class="btn btn-primary" onclick="refreshDemo()">Refresh Demo</button>
+        </div>
+
+        <div class="footer">© 2026 FastFood Delivery · Merchant Dashboard Demo</div>
+    </div>
+</div>
+
+<script>
+    // 尝试从 localStorage 读取当前登录邮箱
+    (function() {
+        try {
+            var email = localStorage.getItem('currentUserEmail');
+            if (email) {
+                document.getElementById('merchantEmail').textContent = email;
+            }
+        } catch (e) {}
+    })();
+
+    function goBackToLogin() {
+        window.location.href = 'login.html';
+    }
+
+    function refreshDemo() {
+        // 这里可以调用后端接口刷新真实订单数据
+        alert('Demo 页面已刷新（示例）。你可以在这里接入真实订单接口。');
+    }
+</script>
+</body>
+</html>

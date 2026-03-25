@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background: #f6f7fb;
+            min-height: 100vh;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+        }
+        .page {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 18px 16px 32px;
+            width: 100%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .brand-logo span {
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+        }
+        .brand-text-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .brand-text-sub {
+            font-size: 12px;
+            color: #888;
+        }
+        .user-info {
+            font-size: 13px;
+            color: #555;
+            text-align: right;
+        }
+        .user-info button {
+            margin-top: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .search-box {
+            flex: 1 1 180px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            border-radius: 999px;
+            padding: 6px 10px;
+            border: 1px solid #e3e4eb;
+        }
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 13px;
+        }
+        .filter-select {
+            border-radius: 999px;
+            border: 1px solid #e3e4eb;
+            background: #fff;
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+        .content-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(260px, 0.9fr);
+            gap: 18px;
+            align-items: flex-start;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            padding: 10px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 170px;
+        }
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .product-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #fff7e6;
+            color: #b26b00;
+        }
+        .product-desc {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            min-height: 32px;
+        }
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+        }
+        .price-block {
+            font-size: 13px;
+            color: #444;
+        }
+        .price-main {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff7a1a;
+        }
+        .price-sub {
+            font-size: 11px;
+            color: #999;
+        }
+        .btn-add {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 14px;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(255, 179, 71, 0.4);
+        }
+        .cart {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            padding: 12px 12px 14px;
+            max-height: 460px;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .cart-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .cart-count {
+            font-size: 12px;
+            color: #666;
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            margin-bottom: 8px;
+        }
+        .cart-empty {
+            font-size: 12px;
+            color: #999;
+            padding: 10px 4px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 6px 2px;
+            border-bottom: 1px solid #f1f1f5;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item-main {
+            flex: 1;
+            margin-right: 6px;
+        }
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .cart-item-meta {
+            font-size: 11px;
+            color: #777;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+        }
+        .cart-qty-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: #fafafa;
+            cursor: pointer;
+            line-height: 18px;
+            text-align: center;
+        }
+        .cart-summary {
+            border-top: 1px solid #f1f1f5;
+            padding-top: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .cart-total-label {
+            color: #555;
+        }
+        .cart-total-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff7a1a;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-cart {
+            flex: 1;
+            border-radius: 999px;
+            border: none;
+            padding: 7px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-checkout {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff;
+        }
+        .btn-clear {
+            background: #f3f4f6;
+            color: #555;
+        }
+        .status {
+            margin-top: 14px;
+            font-size: 12px;
+            color: #888;
+            min-height: 18px;
+        }
+        .status.error { color: #e53935; }
+        .status.success { color: #43a047; }
+        .footer {
+            margin-top: 16px;
+            font-size: 11px;
+            color: #aaa;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .header { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .user-info { text-align: left; }
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+            .cart {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <div class="brand">
+            <div class="brand-logo"><span>🍱</span></div>
+            <div>
+                <div class="brand-text-title">FastFood Delivery</div>
+                <div class="brand-text-sub">Browse and order your favorite meals</div>
+            </div>
+        </div>
+        <div class="user-info">
+            <div id="userEmail">Signed in as: Guest</div>
+            <button onclick="goToLogin()">Log out</button>
+        </div>
+    </header>
+
+    <section class="toolbar">
+        <div class="search-box">
+            <span>🔍</span>
+            <input id="searchInput" type="text" placeholder="Search products..." oninput="renderProducts()" />
+        </div>
+        <select id="categoryFilter" class="filter-select" onchange="renderProducts()">
+            <option value="all">All categories</option>
+            <option value="rice">Rice bowls</option>
+            <option value="noodle">Noodles</option>
+            <option value="drink">Drinks</option>
+            <option value="snack">Snacks</option>
+        </select>
+    </section>
+
+    <div class="content-layout">
+        <section>
+            <section class="products-grid" id="productsGrid">
+                <!-- Products will be rendered here -->
+            </section>
+            <div id="status" class="status">Loading products...</div>
+        </section>
+
+        <aside class="cart" aria-label="Shopping cart">
+            <div class="cart-header">
+                <div class="cart-title">Shopping Cart</div>
+                <div class="cart-count" id="cartCount">0 items</div>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty">Your cart is empty. Add some tasty meals!</div>
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total-label">Total</div>
+                <div class="cart-total-value" id="cartTotal">$0.00</div>
+            </div>
+            <div class="cart-actions">
+                <button class="btn-cart btn-clear" type="button" onclick="clearCart()">Clear</button>
+                <button class="btn-cart btn-checkout" type="button" onclick="checkout()">Checkout</button>
+            </div>
+        </aside>
+    </div>
+
+    <div class="footer">© 2026 FastFood Delivery · Products</div>
+</div>
+
+<script>
+    // Example in-memory product data as a fallback
+    let products = [
+        { id: 1, name: 'Chicken Rice Bowl', desc: 'Grilled chicken with vegetables and steamed rice.', price: 9.9, unit: 'per bowl', category: 'rice', tag: 'Popular' },
+        { id: 2, name: 'Beef Noodle Soup', desc: 'Slow-cooked beef with hand-pulled noodles.', price: 11.5, unit: 'per bowl', category: 'noodle', tag: 'Chef special' },
+        { id: 3, name: 'Fresh Lemon Tea', desc: 'Refreshing lemon tea with light sugar.', price: 3.5, unit: 'per cup', category: 'drink', tag: 'Drink' },
+        { id: 4, name: 'French Fries', desc: 'Crispy fries with tomato ketchup.', price: 4.2, unit: 'per portion', category: 'snack', tag: 'Snack' },
+        { id: 5, name: 'Vegetable Rice Bowl', desc: 'Seasonal vegetables with healthy brown rice.', price: 8.5, unit: 'per bowl', category: 'rice', tag: 'Healthy' }
+    ];
+
+    let cart = [];
+
+    async function loadProductsFromApi() {
+        const statusEl = document.getElementById('status');
+        try {
+            const resp = await fetch('http://localhost:8080/products');
+            if (!resp.ok) {
+                throw new Error('Network error: ' + resp.status);
+            }
+            const data = await resp.json();
+            if (Array.isArray(data)) {
+                products = data;
+            } else if (data && Array.isArray(data.data)) {
+                products = data.data;
+            }
+            statusEl.textContent = '';
+        } catch (e) {
+            statusEl.textContent = 'Using demo data because product API is not available yet.';
+            statusEl.className = 'status info';
+        } finally {
+            renderProducts();
+        }
+    }
+
+    function renderProducts() {
+        const grid = document.getElementById('productsGrid');
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const category = document.getElementById('categoryFilter').value;
+
+        grid.innerHTML = '';
+
+        const filtered = products.filter(p => {
+            const matchesSearch = !search || p.name.toLowerCase().includes(search) || (p.desc || '').toLowerCase().includes(search);
+            const matchesCategory = category === 'all' || p.category === category;
+            return matchesSearch && matchesCategory;
+        });
+
+        if (!filtered.length) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; font-size: 13px; color:#888;">No products found. Try a different keyword.</div>';
+            return;
+        }
+
+        for (const p of filtered) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-header">
+                    <div class="product-title">${p.name}</div>
+                    <span class="product-tag">${p.tag || 'Meal'}</span>
+                </div>
+                <div class="product-desc">${p.desc || ''}</div>
+                <div class="product-footer">
+                    <div class="price-block">
+                        <div class="price-main">$${Number(p.price).toFixed(2)}</div>
+                        <div class="price-sub">${p.unit || 'per item'}</div>
+                    </div>
+                    <button class="btn-add" onclick="addToCart(${p.id})">Add to cart</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        }
+    }
+
+    function addToCart(id) {
+        const statusEl = document.getElementById('status');
+        const product = products.find(p => p.id === id);
+        if (!product) {
+            statusEl.textContent = 'Product not found.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: Number(product.price) || 0,
+                unit: product.unit || 'per item',
+                quantity: 1
+            });
+        }
+
+        renderCart();
+        statusEl.textContent = `Added "${product.name}" to cart.`;
+        statusEl.className = 'status success';
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        const countEl = document.getElementById('cartCount');
+        const totalEl = document.getElementById('cartTotal');
+
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+        countEl.textContent = totalItems + (totalItems === 1 ? ' item' : ' items');
+        totalEl.textContent = '$' + totalPrice.toFixed(2);
+
+        container.innerHTML = '';
+        if (!cart.length) {
+            container.innerHTML = '<div class="cart-empty">Your cart is empty. Add some tasty meals!</div>';
+            return;
+        }
+
+        for (const item of cart) {
+            const row = document.createElement('div');
+            row.className = 'cart-item';
+            row.innerHTML = `
+                <div class="cart-item-main">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-meta">$${item.price.toFixed(2)} · ${item.unit}</div>
+                </div>
+                <div class="cart-item-actions">
+                    <button class="cart-qty-btn" type="button" onclick="changeQty(${item.id}, -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="cart-qty-btn" type="button" onclick="changeQty(${item.id}, 1)">+</button>
+                </div>
+            `;
+            container.appendChild(row);
+        }
+    }
+
+    function changeQty(id, delta) {
+        const item = cart.find(it => it.id === id);
+        if (!item) return;
+        const newQty = item.quantity + delta;
+        if (newQty <= 0) {
+            cart = cart.filter(it => it.id !== id);
+        } else {
+            item.quantity = newQty;
+        }
+        renderCart();
+    }
+
+    function clearCart() {
+        cart = [];
+        renderCart();
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = 'Cart cleared.';
+        statusEl.className = 'status info';
+    }
+
+    function checkout() {
+        if (!cart.length) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = 'Your cart is empty. Add some items first.';
+            statusEl.className = 'status error';
+            return;
+        }
+        const payload = {
+            items: cart,
+            totalPrice: cart.reduce((sum, it) => sum + it.quantity * it.price, 0),
+            totalItems: cart.reduce((sum, it) => sum + it.quantity, 0)
+        };
+        try {
+            localStorage.setItem('checkoutCart', JSON.stringify(payload));
+        } catch (_) {}
+        window.location.href = 'checkout.html';
+    }
+
+    function goToLogin() {
+        try {
+            localStorage.removeItem('currentUserEmail');
+        } catch (_) {}
+        window.location.href = 'login.html';
+    }
+
+    const userEmail = localStorage.getItem('currentUserEmail');
+    if (userEmail) {
+        document.getElementById('userEmail').textContent = 'Signed in as: ' + userEmail;
+    }
+
+    loadProductsFromApi();
+</script>
+</body>
+</html>

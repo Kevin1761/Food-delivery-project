@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 24px 20px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            padding: 26px 22px 24px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #ffb347;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px;
+            margin-right: 10px;
+        }
+        .brand-text-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+        .brand-text-sub {
+            margin-top: 2px;
+            font-size: 12px;
+            color: #999;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            color: #222;
+        }
+        .subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 11px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #ffb347;
+            box-shadow: 0 0 0 2px rgba(255, 179, 71, 0.25);
+        }
+        .hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 3px;
+        }
+        .actions {
+            margin-top: 8px;
+            margin-bottom: 6px;
+        }
+        .btn-primary {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            color: #333;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 179, 71, 0.45);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 6px 14px rgba(255, 179, 71, 0.45);
+            opacity: 0.95;
+        }
+        .extra-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #999;
+        }
+        .extra-link {
+            color: #ff9c00;
+            text-decoration: none;
+        }
+        .extra-link:hover {
+            text-decoration: underline;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 12px 0 10px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+        .divider span {
+            margin: 0 8px;
+        }
+        .tips {
+            font-size: 12px;
+            color: #aaa;
+            line-height: 1.4;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 13px;
+            min-height: 18px;
+        }
+        .status.error { color: #e53935; }
+        .status.success { color: #43a047; }
+        .status.info { color: #999; }
+        .footer {
+            margin-top: 14px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            .card { padding: 22px 18px 20px; }
+            .title { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="brand">
+            <div class="brand-logo">🍱</div>
+            <div>
+                <div class="brand-text-title">FastFood Delivery</div>
+                <div class="brand-text-sub">Hot meals delivered fast</div>
+            </div>
+        </div>
+
+        <div class="title">Email Login</div>
+        <div class="subtitle">Please sign in with your registered email and password.</div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                <div class="hint">Example: user@example.com</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="6" />
+                <div class="hint">At least 6 characters, case sensitive</div>
+            </div>
+
+            <div class="extra-row">
+                <span>Don't have an account?</span>
+                <a href="register.html" class="extra-link">Sign Up</a>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-primary">Sign In</button>
+            </div>
+        </form>
+
+        <div class="divider"><span>Tips</span></div>
+        <div class="tips">
+            For your account safety, avoid saving passwords on public devices and always log out when finished.
+        </div>
+
+        <div id="status" class="status info"></div>
+    </div>
+    <div class="footer">© 2026 FastFood Delivery · SpringBoot Demo Login</div>
+</div>
+
+<script>
+    function showToast(msg) {
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = msg;
+        statusEl.className = 'status info';
+    }
+
+    async function login(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const statusEl = document.getElementById('status');
+
+        if (!email || !password) {
+            statusEl.textContent = 'Email and password cannot be empty';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        statusEl.textContent = 'Signing in, please wait...';
+        statusEl.className = 'status info';
+
+        try {
+            const resp = await fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            if (!resp.ok) {
+                throw new Error('Network error: ' + resp.status);
+            }
+
+            const data = await resp.json();
+
+            if (data && (data.code === 1 || data.code === 200 || data.success)) {
+                const user = data.data || data.result || {};
+                statusEl.textContent = 'Login successful, welcome: ' + (user.email || 'User');
+                statusEl.className = 'status success';
+                try {
+                    if (user.email) {
+                        localStorage.setItem('currentUserEmail', user.email);
+                    }
+                } catch (_) {}
+
+                // Decide redirect page by role: 0 = user, 1 = merchant
+                const role = Number(user.role);
+                console.log('Login role from backend:', user.role, 'parsed:', role);
+
+                let target;
+                if (role === 0) {
+                    target = 'products.html';      // user page
+                } else if (role === 1) {
+                    target = 'merchant.html';      // merchant page
+                } else {
+                    target = 'products.html';      // fallback
+                }
+
+                setTimeout(() => {
+                    window.location.href = target;
+                }, 600);
+            } else {
+                statusEl.textContent = (data && (data.msg || data.message)) || 'Login failed, please check your email and password';
+                statusEl.className = 'status error';
+            }
+        } catch (e) {
+            statusEl.textContent = 'Request error: ' + e.message;
+            statusEl.className = 'status error';
+        }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', login);
+</script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background: #f6f7fb;
+            min-height: 100vh;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 12px 32px;
+        }
+        .page {
+            width: 100%;
+            max-width: 900px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .brand-logo span {
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+        }
+        .brand-text-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .brand-text-sub {
+            font-size: 12px;
+            color: #888;
+        }
+        .user-info {
+            font-size: 13px;
+            color: #555;
+            text-align: right;
+        }
+        .user-info button {
+            margin-top: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.9fr);
+            gap: 18px;
+            align-items: flex-start;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            padding: 14px 14px 16px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .order-items-empty {
+            font-size: 13px;
+            color: #999;
+        }
+        .order-item-row {
+            display: grid;
+            grid-template-columns: minmax(0, 2.2fr) 0.8fr 0.9fr;
+            gap: 6px;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f1f5;
+        }
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+        .order-item-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .order-item-meta {
+            font-size: 11px;
+            color: #777;
+        }
+        .order-item-qty {
+            text-align: center;
+        }
+        .order-item-subtotal {
+            text-align: right;
+        }
+        .order-summary {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .order-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+        .order-summary-row.total {
+            margin-top: 8px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #ecfdf3;
+            color: #15803d;
+        }
+        .form-group {
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            color: #555;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 7px 9px;
+            border-radius: 10px;
+            border: 1px solid #e3e4eb;
+            font-size: 13px;
+            outline: none;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        .btn-primary {
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 9px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
+        }
+        .btn-secondary {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #fff;
+            color: #4b5563;
+            margin-top: 8px;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 12px;
+            min-height: 18px;
+        }
+        .status.error { color: #e53935; }
+        .status.success { color: #16a34a; }
+        .status.info { color: #6b7280; }
+        .footer {
+            margin-top: 14px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: center;
+        }
+        @media (max-width: 700px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <div class="brand">
+            <div class="brand-logo"><span>🍱</span></div>
+            <div>
+                <div class="brand-text-title">FastFood Delivery</div>
+                <div class="brand-text-sub">Order summary and delivery details</div>
+            </div>
+        </div>
+        <div class="user-info">
+            <div id="userEmail">Signed in as: Guest</div>
+            <button onclick="goBackToProducts()">Back to products</button>
+        </div>
+    </header>
+
+    <main class="layout">
+        <section class="card" id="orderCard">
+            <div class="card-title">Order items</div>
+            <div id="orderItemsContainer">
+                <div class="order-items-empty">No items in this order. Please go back and add some products.</div>
+            </div>
+            <div class="order-summary" id="orderSummary" style="display:none;">
+                <div class="order-summary-row">
+                    <span>Items</span>
+                    <span id="summaryItems">0</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>Estimated delivery fee</span>
+                    <span id="summaryDelivery">$2.00</span>
+                </div>
+                <div class="order-summary-row total">
+                    <span>Total to pay</span>
+                    <span id="summaryTotal">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <aside class="card">
+            <div class="card-title">Delivery & payment</div>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="deliveryAddress">Delivery address</label>
+                    <textarea id="deliveryAddress" name="deliveryAddress" placeholder="Apartment, street, city, etc." required></textarea>
+                    <div class="hint">Make sure your address is complete so the courier can find you.</div>
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Contact phone</label>
+                    <input id="contactPhone" name="contactPhone" type="tel" placeholder="Phone number" required />
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment method</label>
+                    <select id="paymentMethod" name="paymentMethod">
+                        <option value="card">Credit / Debit Card</option>
+                        <option value="cash">Cash on delivery</option>
+                        <option value="wallet">Wallet balance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="note">Order note (optional)</label>
+                    <textarea id="note" name="note" placeholder="E.g.: No spicy, call when you arrive."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Place order</button>
+                <button type="button" class="btn-secondary" onclick="goBackToProducts()">Back to products</button>
+            </form>
+            <div id="status" class="status info"></div>
+        </aside>
+    </main>
+
+    <div class="footer">© 2026 FastFood Delivery · Checkout</div>
+</div>
+
+<script>
+    function goBackToProducts() {
+        window.location.href = 'products.html';
+    }
+
+    function initUserInfo() {
+        try {
+            const stored = localStorage.getItem('currentUserEmail');
+            if (stored) {
+                document.getElementById('userEmail').textContent = 'Signed in as: ' + stored;
+            }
+        } catch (_) {}
+    }
+
+    function loadCheckoutCart() {
+        const container = document.getElementById('orderItemsContainer');
+        const summaryEl = document.getElementById('orderSummary');
+        const itemsSpan = document.getElementById('summaryItems');
+        const totalSpan = document.getElementById('summaryTotal');
+        const deliverySpan = document.getElementById('summaryDelivery');
+
+        let payload = null;
+        try {
+            const raw = localStorage.getItem('checkoutCart');
+            if (raw) {
+                payload = JSON.parse(raw);
+            }
+        } catch (_) {}
+
+        if (!payload || !Array.isArray(payload.items) || !payload.items.length) {
+            container.innerHTML = '<div class="order-items-empty">No items in this order. Please go back and add some products.</div>';
+            summaryEl.style.display = 'none';
+            return;
+        }
+
+        const items = payload.items;
+        const totalItems = payload.totalItems || items.reduce((sum, it) => sum + (it.quantity || 0), 0);
+        const subtotal = payload.totalPrice || items.reduce((sum, it) => sum + (it.quantity || 0) * (it.price || 0), 0);
+        const deliveryFee = 2.0;
+        const totalToPay = subtotal + deliveryFee;
+
+        container.innerHTML = '';
+        for (const item of items) {
+            const row = document.createElement('div');
+            row.className = 'order-item-row';
+            const qty = item.quantity || 0;
+            const price = Number(item.price) || 0;
+            const subtotalItem = qty * price;
+            row.innerHTML = `
+                <div>
+                    <div class="order-item-name">${item.name}</div>
+                    <div class="order-item-meta">$${price.toFixed(2)} · ${item.unit || 'per item'}</div>
+                </div>
+                <div class="order-item-qty">x ${qty}</div>
+                <div class="order-item-subtotal">$${subtotalItem.toFixed(2)}</div>
+            `;
+            container.appendChild(row);
+        }
+
+        itemsSpan.textContent = totalItems + ' item' + (totalItems === 1 ? '' : 's');
+        deliverySpan.textContent = '$' + deliveryFee.toFixed(2);
+        totalSpan.textContent = '$' + totalToPay.toFixed(2);
+        summaryEl.style.display = 'block';
+    }
+
+    function mapPaymentMethod(value) {
+        // Map front-end select value to backend payMethod int
+        // Adjust mapping according to your actual convention if needed
+        if (value === 'card') return 1;
+        if (value === 'cash') return 2;
+        if (value === 'wallet') return 3;
+        return 1;
+    }
+
+    function formatEstimatedDeliveryTime() {
+        // Backend expects pattern yyyy-MM-dd HH:mm:ss
+        const now = new Date();
+        const eta = new Date(now.getTime() + 30 * 60 * 1000); // +30 minutes by default
+        const pad = (n) => (n < 10 ? '0' + n : '' + n);
+        const y = eta.getFullYear();
+        const m = pad(eta.getMonth() + 1);
+        const d = pad(eta.getDate());
+        const hh = pad(eta.getHours());
+        const mm = pad(eta.getMinutes());
+        const ss = pad(eta.getSeconds());
+        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+    }
+
+    async function submitOrder(event) {
+        event.preventDefault();
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = '';
+        statusEl.className = 'status info';
+
+        let payload = null;
+        try {
+            const raw = localStorage.getItem('checkoutCart');
+            if (raw) payload = JSON.parse(raw);
+        } catch (_) {}
+
+        if (!payload || !Array.isArray(payload.items) || !payload.items.length) {
+            statusEl.textContent = 'Your order has no items. Please go back and add products.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        const address = document.getElementById('deliveryAddress').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        const paymentMethod = document.getElementById('paymentMethod').value;
+        const note = document.getElementById('note').value.trim();
+
+        if (!address || !phone) {
+            statusEl.textContent = 'Delivery address and contact phone are required.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        const items = payload.items;
+        const subtotal = payload.totalPrice || items.reduce((sum, it) => sum + (it.quantity || 0) * (it.price || 0), 0);
+        const packAmount = 0; // You can change this if you charge packaging fee per item
+        const amount = subtotal + packAmount;
+
+        // Build DTO matching backend OrdersSubmitDTO
+        const orderDto = {
+            addressBookId: null,                     // You can replace this with a real address book id
+            payMethod: mapPaymentMethod(paymentMethod),
+            remark: note,
+            estimatedDeliveryTime: formatEstimatedDeliveryTime(),
+            deliveryStatus: 1,                       // 1 = send immediately
+            tablewareNumber: 0,
+            tablewareStatus: 1,                      // 1 = provide by meal count
+            packAmount: packAmount,
+            amount: amount
+        };
+
+        statusEl.textContent = 'Submitting order, please wait...';
+        statusEl.className = 'status info';
+
+        try {
+            const resp = await fetch('http://localhost:8080/user/order/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderDto)
+            });
+
+            if (!resp.ok) {
+                throw new Error('Network error: ' + resp.status);
+            }
+
+            const data = await resp.json();
+            if (data && (data.code === 1 || data.code === 200 || data.success)) {
+                statusEl.textContent = 'Order placed successfully!';
+                statusEl.className = 'status success';
+                try {
+                    localStorage.removeItem('checkoutCart');
+                } catch (_) {}
+            } else {
+                statusEl.textContent = (data && (data.msg || data.message)) || 'Failed to place order. Please try again.';
+                statusEl.className = 'status error';
+            }
+        } catch (e) {
+            statusEl.textContent = 'Request error: ' + e.message;
+            statusEl.className = 'status error';
+        }
+    }
+
+    initUserInfo();
+    loadCheckoutCart();
+    document.getElementById('checkoutForm').addEventListener('submit', submitOrder);
+</script>
+</body>
+</html>
