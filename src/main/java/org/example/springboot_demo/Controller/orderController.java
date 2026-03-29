@@ -18,7 +18,7 @@ public class orderController {
     @Autowired
     private OrderService orderService;
     @PostMapping("/submit")
-   // @ApiOperation("用户下单")
+    // @ApiOperation("User places an order")
     public Result<OrderSubmitVO> submitVOResult(@RequestBody OrdersSubmitDTO ordersSubmitDTO){
         OrderSubmitVO orderSubmitVO1 = orderService.submit(ordersSubmitDTO);
         return Result.success(orderSubmitVO1);

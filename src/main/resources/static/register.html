@@ -231,8 +231,8 @@
         const statusEl = document.getElementById('status');
         const roleInput = document.querySelector('input[name="role"]:checked');
         const role = roleInput ? roleInput.value : 'USER';
-        
-        // 将 role 字符串转换为 code 数字：USER -> 0, MERCHANT -> 1
+
+        // Convert role string to numeric code: USER -> 0, MERCHANT -> 1
         const code = role === 'MERCHANT' ? 1 : 0;
 
         if (!email || !password || !confirmPassword) {

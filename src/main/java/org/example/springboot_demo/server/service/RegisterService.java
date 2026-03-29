@@ -18,8 +18,10 @@ public class RegisterService {
         String email =userRegisterDTO.getEmail();
         String password = userRegisterDTO.getPassword();
 
-        User user = loginMapper.getEmail(email);// 从数据查询email 并封装成user
-        if(user!=null&&user.getEmail() != null){//说明 用户存在
+        // Query email from database and wrap it into a User entity
+        User user = loginMapper.getEmail(email);
+        // If user is not null and email exists, it means the user already exists
+        if(user!=null&&user.getEmail() != null){
             throw new RuntimeException("user exists");
         }
         User user1 = new User();

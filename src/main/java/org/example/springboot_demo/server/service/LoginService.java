@@ -19,7 +19,7 @@ public class LoginService {
         String password = userloginDTO.getPassword();
         user= loginMapper.getEmail(email);
         if(user==null){
-            throw new RuntimeException("账号不存在");
+            throw new RuntimeException("account does not exist");
         }
         if(!password.equals(user.getPassword())){
             throw new RuntimeException("password is wrong");

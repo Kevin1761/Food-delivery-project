@@ -26,9 +26,9 @@ public class OrderServiceImpl implements OrderService {
         orders.setDeliveryTime(LocalDateTime.now());
         orders.setPayStatus(Orders.UN_PAID);
         orders.setNumber(String.valueOf(System.currentTimeMillis()));
-        // 向数据库插入数据
+        // Insert data into the database
         orderMapper.insert(orders);
-        // 插入n 条订单数据
+        // Insert n order detail records (extend as needed)
         OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder()
                 .id(orders.getId())
                 .orderNumber(orders.getNumber())

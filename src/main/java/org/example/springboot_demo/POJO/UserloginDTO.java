@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserloginDTO {
-    // 0 代表商家 1代表用户
+    // 0 represents merchant, 1 represents user
     private String email;
     private String password;
 }

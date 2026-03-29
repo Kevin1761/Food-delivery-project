@@ -23,7 +23,17 @@
 
 ## 三、IDE 中运行项目
 
-### 1. 使用 IntelliJ IDEA
+### 1. 使用 Eclipse
+
+1. 确认已安装 Eclipse IDE for Enterprise Java Developers（版本支持 Java 17）。
+2. 打开 Eclipse，依次点击 `File -> Import...`。
+3. 选择 `Existing Maven Projects`，点击 `Next`。
+4. 在 `Root Directory` 中浏览选择本项目根目录，勾选检测到的 `pom.xml`，点击 `Finish` 导入项目。
+5. 等待 Maven 依赖下载完成，右键项目选择 `Properties -> Java Build Path / Java Compiler`，确保使用的是 JDK 17。
+6. 在 `src/main/java/org/example/springboot_demo/SpringbootDemoApplication.java` 上右键，选择 `Run As -> Java Application` 启动项目。
+7. 控制台显示启动成功后，打开浏览器访问：http://localhost:8080/login.html
+
+### 2. 使用 IntelliJ IDEA
 
 1. 打开 IDEA，选择 "Open"，导入本项目根目录。
 2. 等待 IDEA 自动识别 Maven 项目并下载依赖。
@@ -31,15 +41,8 @@
 4. 在 `src/main/java/org/example/springboot_demo/SpringbootDemoApplication.java` 中找到主启动类，右键选择 "Run" 即可启动。
 5. 启动成功后，默认服务端口为 8080（如需修改，可在 `src/main/resources/application.properties` 中添加/修改 `server.port=xxxx`）。
 6. 等待后端启动成功后 打开浏览器输入 http://localhost:8080/login.html
-### 2. 使用 VS Code
 
-1. 安装扩展：
-   - Extension Pack for Java
-   - Spring Boot Extension Pack（可选）
-2. 打开本项目根目录。
-3. VS Code 会自动识别为 Maven 项目并加载依赖。
-4. 在 Java 资源视图中找到 `SpringbootDemoApplication` 主类，点击运行图标启动。
-5. 6. 等待后端启动成功后 打开浏览器输入 http://localhost:8080/login.html
+
 ## 六、常见问题
 
 - 若启动时报找不到驱动类 `com.mysql.cj.jdbc.Driver`，请确认 MySQL 依赖已正常下载且网络无代理限制。

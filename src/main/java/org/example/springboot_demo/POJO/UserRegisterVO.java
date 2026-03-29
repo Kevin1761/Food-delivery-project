@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserRegisterVO {
-    private int role;//0 代表用户 1 代表商家
+    private int role;   // 0 represents user, 1 represents merchant
     private long id;
     private String email;
 }
