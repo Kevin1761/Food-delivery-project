@@ -30,7 +30,7 @@
 3. 确认 Project SDK 选择为 JDK 17。
 4. 在 `src/main/java/org/example/springboot_demo/SpringbootDemoApplication.java` 中找到主启动类，右键选择 "Run" 即可启动。
 5. 启动成功后，默认服务端口为 8080（如需修改，可在 `src/main/resources/application.properties` 中添加/修改 `server.port=xxxx`）。
-
+6. 等待后端启动成功后 打开浏览器输入 http://localhost:8080/login.html
 ### 2. 使用 VS Code
 
 1. 安装扩展：
@@ -39,7 +39,7 @@
 2. 打开本项目根目录。
 3. VS Code 会自动识别为 Maven 项目并加载依赖。
 4. 在 Java 资源视图中找到 `SpringbootDemoApplication` 主类，点击运行图标启动。
-
+5. 6. 等待后端启动成功后 打开浏览器输入 http://localhost:8080/login.html
 ## 六、常见问题
 
 - 若启动时报找不到驱动类 `com.mysql.cj.jdbc.Driver`，请确认 MySQL 依赖已正常下载且网络无代理限制。
