@@ -10,34 +10,34 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
             background: linear-gradient(135deg, #ffcc33, #ff9800);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 20px;
         }
         .container {
             width: 100%;
-            max-width: 960px;
-            padding: 24px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .card {
             background: #ffffff;
             border-radius: 18px;
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-            padding: 20px 22px 24px;
+            padding: 30px;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
         }
         .brand {
             display: flex;
             align-items: center;
         }
         .brand-logo {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
             background: #ffb347;
             display: flex;
@@ -45,99 +45,293 @@
             justify-content: center;
             color: #fff;
             font-weight: 700;
-            font-size: 22px;
-            margin-right: 10px;
+            font-size: 28px;
+            margin-right: 15px;
         }
         .brand-text-title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
             color: #333;
         }
         .brand-text-sub {
-            margin-top: 2px;
-            font-size: 12px;
+            margin-top: 4px;
+            font-size: 14px;
             color: #999;
         }
         .user-info {
             text-align: right;
-            font-size: 13px;
+            font-size: 14px;
             color: #555;
         }
         .user-info strong {
             color: #333;
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
         }
         .content-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             margin-bottom: 10px;
             color: #222;
         }
+        .tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
         .tips {
-            font-size: 13px;
+            font-size: 14px;
             color: #666;
-            margin-bottom: 14px;
+            margin-bottom: 0;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 6px;
-            font-size: 13px;
+        .status-badge {
+            background: #f5f5f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
         }
-        th, td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
         }
-        th {
-            background: #fff8e1;
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        .stats-panel {
+            background: #fffaf0;
+            border: 1px solid #ffe0a3;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+        .stats-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #8a5a00;
+            margin-bottom: 10px;
+        }
+        .stats-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        .stats-item {
+            background: #fff;
+            border: 1px solid #f4d08f;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .stats-name {
+            font-size: 14px;
             font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
         }
-        tr:nth-child(even) td {
-            background: #fffdf5;
+        .stats-count {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ff7a1a;
+        }
+        .stats-empty {
+            font-size: 14px;
+            color: #888;
+        }
+        .order-item {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        .order-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #ffb347;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .order-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+        .order-time {
+            font-size: 12px;
+            color: #999;
         }
         .status-tag {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 4px 12px;
             border-radius: 999px;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 600;
             color: #fff;
         }
-        .status-pending { background: #ffb300; }
-        .status-doing { background: #42a5f5; }
-        .status-done { background: #66bb6a; }
-        .footer {
-            margin-top: 12px;
-            font-size: 11px;
-            color: rgba(0,0,0,0.5);
-            text-align: center;
+        .status-2 { background: #ffb300; }
+        .status-3 { background: #66bb6a; }
+        .status-6 { background: #ff6b6b; }
+        .order-details {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
         }
-        .actions {
-            margin-top: 10px;
+        .order-meta {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .meta-box {
+            background: #fff7e8;
+            border: 1px solid #ffe0a3;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        .meta-label {
+            font-size: 12px;
+            color: #9a6a00;
+            margin-bottom: 4px;
+        }
+        .meta-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            word-break: break-all;
+        }
+        .items-summary {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .detail-left {
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-name {
+            font-weight: 500;
+            color: #333;
+        }
+        .detail-qty {
+            color: #999;
+            margin: 0 8px;
+        }
+        .detail-price {
+            font-weight: 600;
+            color: #333;
+        }
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        .order-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff9800;
+        }
+        .order-actions {
+            display: flex;
             gap: 8px;
         }
         .btn {
             border: none;
-            border-radius: 999px;
-            padding: 7px 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #ccc;
-            color: #555;
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
         }
         .btn-primary {
             background: linear-gradient(135deg, #ffb347, #ffcc33);
             color: #333;
-            box-shadow: 0 6px 16px rgba(255, 179, 71, 0.45);
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            font-size: 12px;
+            color: rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffb347;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-msg {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
         }
         @media (max-width: 768px) {
-            .card { padding: 18px 16px 18px; }
-            table { font-size: 12px; }
-            th, td { padding: 6px 6px; }
+            .card { padding: 20px; }
+            .header { flex-direction: column; text-align: center; }
+            .user-info { text-align: center; margin-top: 10px; }
+            .order-item { padding: 16px; }
+            .order-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .tools { flex-direction: column; align-items: stretch; }
+            .tools > * { width: 100%; }
+            .order-meta { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -149,64 +343,47 @@
                 <div class="brand-logo">🏪</div>
                 <div>
                     <div class="brand-text-title">FastFood Merchant</div>
-                    <div class="brand-text-sub">Manage your orders and menu</div>
+                    <div class="brand-text-sub">Order Management System</div>
                 </div>
             </div>
             <div class="user-info">
-                <div>Logged in as: <strong id="merchantEmail">Merchant</strong></div>
-                <div>Role: Merchant</div>
+                <strong id="merchantEmail">Welcome</strong>
+                <div>Merchant Dashboard</div>
             </div>
         </div>
 
-        <div class="content-title">Today's Orders (Demo)</div>
-        <div class="tips">This is a demo merchant orders page. Here you can extend real order queries, order acceptance, delivery tracking and more.</div>
-
-        <table>
-            <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>#1001</td>
-                <td>Alice</td>
-                <td>Fried Chicken x2</td>
-                <td>$18.50</td>
-                <td><span class="status-tag status-pending">Pending</span></td>
-            </tr>
-            <tr>
-                <td>#1002</td>
-                <td>Bob</td>
-                <td>Burger Combo x1</td>
-                <td>$9.99</td>
-                <td><span class="status-tag status-doing">In Progress</span></td>
-            </tr>
-            <tr>
-                <td>#1003</td>
-                <td>Carol</td>
-                <td>Pizza x1, Cola x2</td>
-                <td>$22.30</td>
-                <td><span class="status-tag status-done">Completed</span></td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div class="actions">
-            <button class="btn btn-outline" onclick="goBackToLogin()">Back to Login</button>
-            <button class="btn btn-primary" onclick="refreshDemo()">Refresh Demo</button>
+        <div class="tools">
+            <div>
+                <div class="content-title">📦 All Orders</div>
+                <div class="tips">Real-time order list from database</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <div class="status-badge" id="pendingQueueBadge">Pending Queue: 0</div>
+                <button class="btn btn-primary" onclick="loadOrders()">🔄 Refresh</button>
+                <button class="btn btn-secondary" onclick="goBackToLogin()">Logout</button>
+            </div>
         </div>
 
-        <div class="footer">© 2026 FastFood Delivery · Merchant Dashboard Demo</div>
+        <div id="errorContainer"></div>
+        <div class="stats-panel">
+            <div class="stats-title">Dish Order Counts</div>
+            <div id="dishStatsContainer" class="stats-list">
+                <div class="stats-empty">Loading dish statistics...</div>
+            </div>
+        </div>
+        <div id="ordersContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading orders...
+            </div>
+        </div>
+
+        <div class="footer">© 2026 FastFood Delivery · Merchant Dashboard</div>
     </div>
 </div>
 
 <script>
-    // Try to read the current logged-in email from localStorage
+    // Load merchant email from localStorage
     (function() {
         try {
             var email = localStorage.getItem('currentUserEmail');
@@ -216,14 +393,230 @@
         } catch (e) {}
     })();
 
-    function goBackToLogin() {
-        window.location.href = 'login.html';
+    // Function to get status label
+    function getStatusLabel(status) {
+        const statusMap = {
+            2: 'Pending',
+            3: 'Accepted',
+            6: 'Rejected'
+        };
+        return statusMap[status] || 'Unknown';
     }
 
-    function refreshDemo() {
-        // Here you can call backend APIs to refresh real order data
-        alert('Demo page refreshed (sample). You can integrate real order APIs here.');
+    function renderActions(order) {
+        if (order.status !== 2) {
+            return '';
+        }
+
+        return `
+            <button class="btn btn-sm btn-primary" onclick="updateOrderStatus(${order.id}, 'accept')">Accept</button>
+            <button class="btn btn-sm btn-secondary" onclick="updateOrderStatus(${order.id}, 'reject')">Reject</button>
+        `;
     }
+
+    // Function to format date
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        } catch (e) {
+            return dateString;
+        }
+    }
+
+    function formatMoney(value) {
+        const amount = Number(value);
+        return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : '$0.00';
+    }
+
+    function getDishSummary(items) {
+        if (!Array.isArray(items) || items.length === 0) {
+            return 'No dish information';
+        }
+        return items.map(item => `${item.dishName || 'Unknown Dish'} x ${item.quantity || 0}`).join(' , ');
+    }
+
+    function updatePendingQueueBadge(queue) {
+        const badge = document.getElementById('pendingQueueBadge');
+        const count = Array.isArray(queue) ? queue.length : 0;
+        badge.textContent = `Pending Queue: ${count}`;
+    }
+
+    function renderDishStats(dishCounts) {
+        const container = document.getElementById('dishStatsContainer');
+        const entries = Object.entries(dishCounts || {});
+
+        if (!entries.length) {
+            container.innerHTML = '<div class="stats-empty">No dish statistics yet.</div>';
+            return;
+        }
+
+        container.innerHTML = entries.map(([dishName, count]) => `
+            <div class="stats-item">
+                <div class="stats-name">${dishName}</div>
+                <div class="stats-count">${count}</div>
+            </div>
+        `).join('');
+    }
+
+    // Function to render a single order
+    function renderOrder(order) {
+        const items = Array.isArray(order.items) ? order.items : [];
+        const itemsHtml = (order.items || []).map(item => `
+            <div class="detail-item">
+                <div class="detail-left">
+                    <span class="detail-name">${item.dishName || 'Unknown Dish'}</span>
+                    <span class="detail-qty">x ${item.quantity || 0}</span>
+                </div>
+                <span class="detail-price">${formatMoney(item.price || 0)}</span>
+            </div>
+        `).join('');
+
+        return `
+            <div class="order-item">
+                <div class="order-header">
+                    <div>
+                        <div class="order-number">#${order.number || order.id || 'N/A'}</div>
+                        <div class="order-time">${formatDate(order.orderTime)}</div>
+                    </div>
+                    <span class="status-tag status-${order.status || 2}">${getStatusLabel(order.status)}</span>
+                </div>
+
+                <div class="order-meta">
+                    <div class="meta-box">
+                        <div class="meta-label">Order Number</div>
+                        <div class="meta-value">${order.number || order.id || 'N/A'}</div>
+                    </div>
+                    <div class="meta-box">
+                        <div class="meta-label">Total Amount</div>
+                        <div class="meta-value">${formatMoney(order.amount)}</div>
+                    </div>
+                </div>
+
+                <div class="order-details">
+                    <div style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">Customer Order Details</div>
+                    <div class="items-summary">${getDishSummary(items)}</div>
+                    ${itemsHtml || '<div style="color: #999; font-size: 14px;">No items</div>'}
+                </div>
+
+                <div class="order-footer">
+                    <div>
+                        <div style="font-size: 12px; color: #999; margin-bottom: 4px;">Customer: <strong>${order.phone || '-'}</strong></div>
+                        <div style="font-size: 12px; color: #999;">Address: <strong>${order.address || '-'}</strong></div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="order-total" style="margin-bottom: 8px;">${formatMoney(order.amount)}</div>
+                        <div class="order-actions">
+                            ${renderActions(order)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Load orders from backend
+    async function loadOrders() {
+        const container = document.getElementById('ordersContainer');
+        const errorContainer = document.getElementById('errorContainer');
+        
+        errorContainer.innerHTML = '';
+        container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading orders...</div>';
+
+        try {
+            const [ordersResp, queueResp, dishStatsResp] = await Promise.all([
+                fetch('/user/order/merchant/list'),
+                fetch('/user/order/merchant/pending/queue'),
+                fetch('/user/order/merchant/dish-counts')
+            ]);
+
+            if (!ordersResp.ok) {
+                throw new Error('Network error: ' + ordersResp.status);
+            }
+
+            if (!queueResp.ok) {
+                throw new Error('Network error: ' + queueResp.status);
+            }
+
+            if (!dishStatsResp.ok) {
+                throw new Error('Network error: ' + dishStatsResp.status);
+            }
+
+            const queueData = await queueResp.json();
+            updatePendingQueueBadge(queueData.data || []);
+
+            const dishStatsData = await dishStatsResp.json();
+            renderDishStats(dishStatsData.data || {});
+
+            const data = await ordersResp.json();
+            
+            if (data && (data.code === 1 || data.code === 200 || data.success)) {
+                const orders = data.data || [];
+                
+                if (orders.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p><strong>No orders yet</strong></p>
+                            <p>Orders placed by customers will appear here</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = orders.map(order => renderOrder(order)).join('');
+                }
+            } else {
+                throw new Error(data.msg || 'Failed to load orders');
+            }
+        } catch (e) {
+            errorContainer.innerHTML = `<div class="error-msg">⚠️ ${e.message}</div>`;
+            container.innerHTML = '';
+            updatePendingQueueBadge([]);
+            renderDishStats({});
+        }
+    }
+
+    async function updateOrderStatus(orderId, action) {
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.innerHTML = '';
+
+        try {
+            const resp = await fetch(`/user/order/merchant/${orderId}/${action}`, {
+                method: 'POST'
+            });
+
+            if (!resp.ok) {
+                throw new Error('Network error: ' + resp.status);
+            }
+
+            const data = await resp.json();
+            if (!(data && (data.code === 1 || data.code === 200 || data.success))) {
+                throw new Error(data.msg || 'Failed to update order status');
+            }
+
+            await loadOrders();
+        } catch (e) {
+            errorContainer.innerHTML = `<div class="error-msg">⚠️ ${e.message}</div>`;
+        }
+    }
+
+    // Go back to login
+    function goBackToLogin() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('currentUserEmail');
+            window.location.href = 'login.html';
+        }
+    }
+
+    // Load orders on page load
+    document.addEventListener('DOMContentLoaded', loadOrders);
 </script>
 </body>
 </html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Order Success</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 40px 30px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .success-title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .success-subtitle {
+            font-size: 14px;
+            color: #888;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .order-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e8e9ea;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .order-number {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: all;
+        }
+
+        .order-number:hover {
+            background: #f0f0f0;
+        }
+
+        .amount {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .time {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .delivery-info {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .delivery-info strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f1f4;
+            color: #222;
+            border: 1px solid #e0e1e8;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e9f0;
+            border-color: #d0d1d8;
+        }
+
+        .tips {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .tips strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 16px;
+            }
+
+            .success-title {
+                font-size: 24px;
+            }
+
+            .info-value {
+                font-size: 14px;
+            }
+
+            .amount {
+                font-size: 20px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary {
+                grid-column: span 1;
+            }
+        }
+
+        .copy-btn {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            margin-left: 8px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #667eea;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            color: #764ba2;
+        }
+
+        .copy-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #222;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-bottom: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .copy-btn.copied .copy-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .order-items {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .order-items-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8e9ea;
+            font-size: 13px;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 1;
+            color: #555;
+        }
+
+        .item-qty {
+            color: #999;
+            margin: 0 12px;
+        }
+
+        .item-price {
+            color: #222;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Success Icon -->
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+
+        <!-- Title -->
+        <h1 class="success-title">Order Placed Successfully</h1>
+        <p class="success-subtitle">Your order has been submitted, the merchant is preparing for you</p>
+
+        <!-- Order Information -->
+        <div class="order-info">
+            <div class="info-row">
+                <span class="info-label">Order Number</span>
+                <div class="info-value" style="display: flex; align-items: center;">
+                    <span class="order-number" id="orderNumber">-</span>
+                    <button class="copy-btn" onclick="copyOrderNumber()" title="Copy order number">
+                        <span>📋</span>
+                        <span class="copy-tooltip">Copied</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Order Amount</span>
+                <span class="info-value amount" id="orderAmount">$0.00</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Order Time</span>
+                <span class="info-value time" id="orderTime">-</span>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="order-items" id="orderItemsContainer" style="display: none;">
+            <div class="order-items-title">📦 Order Contents</div>
+            <div id="orderItemsList"></div>
+        </div>
+
+        <!-- Delivery Info -->
+        <div class="delivery-info">
+            <strong>✓ Order Confirmed</strong>
+            <div>Estimated delivery in <span id="estimatedTime">30-45</span> minutes</div>
+            <div style="margin-top: 8px; font-size: 12px;">
+                We will notify you promptly when the order status changes
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="goHome()">Back to Home</button>
+            <button class="btn btn-secondary" onclick="viewOrders()">View Orders</button>
+            <button class="btn btn-primary" onclick="continueShop()">Continue Shopping</button>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips">
+            <strong>💡 Tips</strong>
+            <div>1. Keep your phone on, the merchant may contact you</div>
+            <div>2. Order number can be used to track delivery information</div>
+            <div>3. If you have any questions, you can contact the merchant in "View Orders"</div>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL query parameters
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                id: params.get('id'),
+                orderNumber: params.get('orderNumber'),
+                money: params.get('money'),
+                orderTime: params.get('orderTime'),
+                items: params.get('items') ? JSON.parse(decodeURIComponent(params.get('items'))) : []
+            };
+        }
+
+        // Initialize page with order data
+        function initPage() {
+            const params = getQueryParams();
+
+            // Display order number
+            const orderNumberEl = document.getElementById('orderNumber');
+            orderNumberEl.textContent = params.orderNumber || '-';
+
+            // Format and display amount
+            const amount = parseFloat(params.money) || 0;
+            document.getElementById('orderAmount').textContent = `$${amount.toFixed(2)}`;
+
+            // Format and display time
+            if (params.orderTime) {
+                try {
+                    const date = new Date(params.orderTime);
+                    const timeStr = date.toLocaleString('zh-CN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    });
+                    document.getElementById('orderTime').textContent = timeStr;
+                } catch (e) {
+                    document.getElementById('orderTime').textContent = params.orderTime;
+                }
+            }
+
+            // Display order items if available
+            if (params.items && params.items.length > 0) {
+                displayOrderItems(params.items);
+            }
+
+            // Random estimated delivery time (25-45 minutes)
+            const estimatedTime = Math.floor(Math.random() * 20) + 25;
+            document.getElementById('estimatedTime').textContent = estimatedTime + '-' + (estimatedTime + 15);
+        }
+
+        // Display order items
+        function displayOrderItems(items) {
+            const container = document.getElementById('orderItemsContainer');
+            const itemsList = document.getElementById('orderItemsList');
+
+            if (!items || items.length === 0) return;
+
+            itemsList.innerHTML = items.map(item => `
+                <div class="item-row">
+                    <span class="item-name">${item.name || item.dishName || 'Product'}</span>
+                    <span class="item-qty">×${item.quantity}</span>
+                    <span class="item-price">$${(parseFloat(item.price) * (item.quantity || 1)).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            container.style.display = 'block';
+        }
+
+        // Copy order number to clipboard
+        function copyOrderNumber() {
+            const orderNumber = document.getElementById('orderNumber').textContent;
+            navigator.clipboard.writeText(orderNumber).then(() => {
+                const btn = event.currentTarget;
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Copy failed, please copy manually');
+            });
+        }
+
+        // Navigation functions
+        function goHome() {
+            window.location.href = 'products.html';
+        }
+
+        function viewOrders() {
+            // TODO: Implement order history page
+            alert('Order query feature under development...');
+        }
+
+        function continueShop() {
+            window.location.href = 'products.html';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

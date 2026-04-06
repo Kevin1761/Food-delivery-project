@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FastFood Delivery - Payment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background: #f6f7fb;
+            min-height: 100vh;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 12px 32px;
+        }
+        .page {
+            width: 100%;
+            max-width: 720px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .brand-logo span {
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+        }
+        .brand-text-title { font-size: 18px; font-weight: 700; }
+        .brand-text-sub { font-size: 12px; color: #888; }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            padding: 16px 16px 18px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+        .summary-row.total {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .label-muted { color: #777; font-size: 13px; }
+        .pay-methods {
+            margin-top: 14px;
+            font-size: 14px;
+        }
+        .pay-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+        .btn-primary {
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 10px 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(22, 163, 74, 0.3);
+            margin-top: 16px;
+        }
+        .btn-secondary {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #fff;
+            color: #4b5563;
+            margin-top: 8px;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 13px;
+            min-height: 18px;
+        }
+        .status.error { color: #e53935; }
+        .status.success { color: #16a34a; }
+        .status.info { color: #6b7280; }
+        .footer {
+            margin-top: 14px;
+            font-size: 11px;
+            color: #9ca3af;
+            text-align: center;
+        }
+        .card-form {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+        .card-form.show {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #e3e4eb;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #16a34a;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <div class="brand">
+            <div class="brand-logo"><span>💳</span></div>
+            <div>
+                <div class="brand-text-title">FastFood Payment</div>
+                <div class="brand-text-sub">Confirm and complete your payment</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="card-title">Order payment</div>
+        <div id="orderInfoBlock">
+            <div class="summary-row">
+                <span class="label-muted">Order number</span>
+                <span id="orderNumber">-</span>
+            </div>
+            <div class="summary-row">
+                <span class="label-muted">Order time</span>
+                <span id="orderTime">-</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total to pay</span>
+                <span id="totalAmount">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="label-muted">Chosen payment method</span>
+                <span id="paymentMethodText">-</span>
+            </div>
+        </div>
+
+        <div class="pay-methods">
+            <div class="label-muted">Select payment method:</div>
+            <div class="pay-option">
+                <input type="radio" name="payOption" id="payOption1" value="card" checked onchange="toggleCardForm()" />
+                <label for="payOption1">💳 Credit / Debit Card</label>
+            </div>
+            <div class="pay-option">
+                <input type="radio" name="payOption" id="payOption2" value="cash" onchange="toggleCardForm()" />
+                <label for="payOption2">💵 Cash on delivery</label>
+            </div>
+        </div>
+
+        <!-- Credit Card Form -->
+        <div id="cardFormContainer" class="card-form">
+            <form id="cardForm">
+                <div class="form-group">
+                    <label for="cardNumber">Card number</label>
+                    <input 
+                        id="cardNumber" 
+                        type="text" 
+                        placeholder="1234 5678 9012 3456" 
+                        maxlength="19"
+                        oninput="formatCardNumber(event)"
+                        required 
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="cardholderName">Cardholder name</label>
+                    <input 
+                        id="cardholderName" 
+                        type="text" 
+                        placeholder="John Doe" 
+                        maxlength="50"
+                        required 
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiryDate">Valid thru (MM/YY)</label>
+                        <input 
+                            id="expiryDate" 
+                            type="text" 
+                            placeholder="12/28" 
+                            maxlength="5"
+                            oninput="formatExpiryDate(event)"
+                            required 
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input 
+                            id="cvv" 
+                            type="text" 
+                            placeholder="123" 
+                            maxlength="4"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            required 
+                        />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <button class="btn-primary" type="button" onclick="confirmPayment()">Pay now</button>
+        <button class="btn-secondary" type="button" onclick="backToProducts()">Back to products</button>
+
+        <div id="status" class="status info"></div>
+    </section>
+
+    <div class="footer">© 2026 FastFood Delivery · Payment</div>
+</div>
+
+<script>
+    function formatMoney(amount) {
+        const num = Number(amount) || 0;
+        return '$' + num.toFixed(2);
+    }
+
+    function mapPaymentText(method) {
+        if (method === 'card' || method === 1) return 'Credit / Debit Card';
+        if (method === 'cash' || method === 2) return 'Cash on delivery';
+        if (method === 'wallet' || method === 3) return 'Wallet balance';
+        return 'Unknown';
+    }
+
+    function toggleCardForm() {
+        const payOption = document.querySelector('input[name="payOption"]:checked').value;
+        const cardFormContainer = document.getElementById('cardFormContainer');
+        if (payOption === 'card') {
+            cardFormContainer.classList.add('show');
+        } else {
+            cardFormContainer.classList.remove('show');
+        }
+    }
+
+    function formatCardNumber(event) {
+        let value = event.target.value.replace(/\s/g, '');
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formatted += ' ';
+            }
+            formatted += value[i];
+        }
+        event.target.value = formatted;
+    }
+
+    function formatExpiryDate(event) {
+        let value = event.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        event.target.value = value;
+    }
+
+    function loadOrderInfo() {
+        const statusEl = document.getElementById('status');
+        let info = null;
+        try {
+            const raw = localStorage.getItem('lastOrderInfo');
+            if (raw) info = JSON.parse(raw);
+        } catch (_) {}
+
+        if (!info) {
+            statusEl.textContent = 'No order information found. Please place an order again.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        if (info.orderNumber) {
+            document.getElementById('orderNumber').textContent = info.orderNumber;
+        }
+        if (info.orderTime) {
+            document.getElementById('orderTime').textContent = info.orderTime;
+        }
+        if (info.totalAmount != null) {
+            document.getElementById('totalAmount').textContent = formatMoney(info.totalAmount);
+        }
+        if (info.paymentMethod != null) {
+            document.getElementById('paymentMethodText').textContent = mapPaymentText(info.paymentMethod);
+            // Auto-select payment method
+            if (info.paymentMethod === 'card' || info.paymentMethod === 1) {
+                document.getElementById('payOption1').checked = true;
+            } else if (info.paymentMethod === 'cash' || info.paymentMethod === 2) {
+                document.getElementById('payOption2').checked = true;
+            }
+        }
+
+        statusEl.textContent = 'Please select payment details and confirm.';
+        statusEl.className = 'status info';
+        toggleCardForm();
+    }
+
+    function confirmPayment() {
+        const statusEl = document.getElementById('status');
+        const payOption = document.querySelector('input[name="payOption"]:checked').value;
+
+        // Validate card form if credit card payment
+        if (payOption === 'card') {
+            const cardNum = document.getElementById('cardNumber').value.trim();
+            const cardName = document.getElementById('cardholderName').value.trim();
+            const expiry = document.getElementById('expiryDate').value.trim();
+            const cvv = document.getElementById('cvv').value.trim();
+
+            if (!cardNum || !cardName || !expiry || !cvv) {
+                statusEl.textContent = 'Please fill in all card information.';
+                statusEl.className = 'status error';
+                return;
+            }
+
+            if (cardNum.replace(/\s/g, '').length < 13) {
+                statusEl.textContent = 'Card number must be at least 13 digits.';
+                statusEl.className = 'status error';
+                return;
+            }
+
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                statusEl.textContent = 'Invalid expiry date format (use MM/YY).';
+                statusEl.className = 'status error';
+                return;
+            }
+
+            if (cvv.length < 3) {
+                statusEl.textContent = 'CVV must be at least 3 digits.';
+                statusEl.className = 'status error';
+                return;
+            }
+        }
+
+        statusEl.textContent = 'Processing payment...';
+        statusEl.className = 'status info';
+
+        setTimeout(() => {
+            statusEl.textContent = 'Payment successful! Thank you for your order.';
+            statusEl.className = 'status success';
+            try {
+                localStorage.removeItem('lastOrderInfo');
+            } catch (_) {}
+
+            setTimeout(() => {
+                backToProducts();
+            }, 1500);
+        }, 1500);
+    }
+
+    function backToProducts() {
+        window.location.href = 'products.html';
+    }
+
+    loadOrderInfo();
+</script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+openapi: 3.0.0
+info:
+  title: FastFood Delivery API
+  description: |
+    FastFood Delivery 是一个在线外卖订餐系统的后端 API。
+    提供用户认证、订单管理等核心功能。
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: Apache 2.0
+
+servers:
+  - url: http://localhost:8080
+    description: 本地开发服务器
+  - url: https://api.example.com
+    description: 生产环境服务器
+
+tags:
+  - name: User Auth
+    description: 用户认证相关接口
+  - name: Orders
+    description: 订单管理相关接口
+
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Auth
+      summary: 用户登录
+      description: 用户使用邮箱和密码进行登录
+      operationId: userLogin
+      requestBody:
+        description: 登录凭证
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDTO'
+            example:
+              email: user@example.com
+              password: password123
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultUserLoginVO'
+              example:
+                code: 1
+                msg: null
+                data:
+                  role: 0
+                  id: 1
+                  email: user@example.com
+        '400':
+          description: 登录失败 - 邮箱或密码错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultError'
+              example:
+                code: 0
+                msg: Invalid email or password
+                data: null
+        '500':
+          description: 服务器内部错误
+
+  /user/register:
+    post:
+      tags:
+        - User Auth
+      summary: 用户注册
+      description: 创建新用户账户
+      operationId: userRegister
+      requestBody:
+        description: 注册信息
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterDTO'
+            example:
+              email: newuser@example.com
+              password: password123
+              code: 0
+      responses:
+        '200':
+          description: 注册成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultUserRegisterVO'
+              example:
+                code: 1
+                msg: null
+                data:
+                  role: 0
+                  id: 2
+                  email: newuser@example.com
+        '400':
+          description: 注册失败 - 邮箱已存在或无效输入
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultError'
+              example:
+                code: 0
+                msg: Email already exists
+                data: null
+        '500':
+          description: 服务器内部错误
+
+  /user/order/submit:
+    post:
+      tags:
+        - Orders
+      summary: 提交订单
+      description: 用户提交新订单，包括配送地址、支付方式和菜品列表
+      operationId: submitOrder
+      requestBody:
+        description: 订单信息
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersSubmitDTO'
+            example:
+              addressBookId: null
+              address: 123 Main Street, New York, NY 10001
+              phone: '+1234567890'
+              payMethod: 1
+              remark: No spicy, please
+              orderTime: '2026-04-03 10:30:00'
+              estimatedDeliveryTime: '2026-04-03 11:00:00'
+              deliveryStatus: 1
+              tablewareNumber: 0
+              tablewareStatus: 1
+              packAmount: 0
+              amount: 35.50
+              orderDetails:
+                - name: Chicken Rice Bowl
+                  quantity: 2
+                  price: 9.99
+                - name: Fresh Lemon Tea
+                  quantity: 1
+                  price: 3.52
+      responses:
+        '200':
+          description: 订单提交成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultOrderSubmitVO'
+              example:
+                code: 1
+                msg: null
+                data:
+                  id: 1
+                  orderNumber: '1712139000000'
+                  money: 35.50
+                  orderTime: '2026-04-03 10:30:00'
+        '400':
+          description: 订单提交失败 - 无效输入或缺少数据
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultError'
+              example:
+                code: 0
+                msg: Order submission failed - invalid address
+                data: null
+        '500':
+          description: 服务器内部错误
+
+components:
+  schemas:
+    # 通用响应
+    Result:
+      type: object
+      description: 统一的 API 响应包装器
+      properties:
+        code:
+          type: integer
+          description: 响应码 - 1 = 成功，0 = 失败
+          example: 1
+        msg:
+          type: string
+          description: 错误或状态消息
+          example: Operation successful
+          nullable: true
+        data:
+          type: object
+          description: 返回数据
+          nullable: true
+
+    ResultError:
+      type: object
+      description: 错误响应
+      properties:
+        code:
+          type: integer
+          example: 0
+        msg:
+          type: string
+          example: Error message
+        data:
+          type: null
+
+    # 用户认证
+    UserLoginDTO:
+      type: object
+      description: 用户登录请求体
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: 用户邮箱
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          description: 用户密码
+          minLength: 6
+          example: password123
+
+    UserLoginVO:
+      type: object
+      description: 用户登录响应
+      properties:
+        role:
+          type: integer
+          description: 用户角色 - 0 = 客户，1 = 商家
+          example: 0
+        id:
+          type: integer
+          format: int64
+          description: 用户 ID
+          example: 1
+        email:
+          type: string
+          description: 用户邮箱
+          example: user@example.com
+
+    ResultUserLoginVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        msg:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/UserLoginVO'
+
+    UserRegisterDTO:
+      type: object
+      description: 用户注册请求体
+      required:
+        - email
+        - password
+        - code
+      properties:
+        email:
+          type: string
+          description: 用户邮箱
+          format: email
+          example: newuser@example.com
+        password:
+          type: string
+          description: 用户密码
+          minLength: 6
+          example: password123
+        code:
+          type: integer
+          description: 用户类型 - 0 = 客户，1 = 商家
+          enum: [0, 1]
+          example: 0
+
+    UserRegisterVO:
+      type: object
+      description: 用户注册响应
+      properties:
+        role:
+          type: integer
+          description: 用户角色 - 0 = 客户，1 = 商家
+          example: 0
+        id:
+          type: integer
+          format: int64
+          description: 用户 ID
+          example: 2
+        email:
+          type: string
+          description: 用户邮箱
+          example: newuser@example.com
+
+    ResultUserRegisterVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        msg:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/UserRegisterVO'
+
+    # 订单管理
+    OrderDetail:
+      type: object
+      description: 订单菜品详情
+      required:
+        - name
+        - quantity
+        - price
+      properties:
+        name:
+          type: string
+          description: 菜品名称
+          example: Chicken Rice Bowl
+        quantity:
+          type: integer
+          description: 菜品数量
+          example: 2
+        price:
+          type: number
+          format: decimal
+          description: 菜品单价
+          example: 9.99
+
+    OrdersSubmitDTO:
+      type: object
+      description: 订单提交请求体
+      required:
+        - address
+        - phone
+        - payMethod
+        - orderTime
+        - estimatedDeliveryTime
+        - deliveryStatus
+        - tablewareNumber
+        - tablewareStatus
+        - packAmount
+        - amount
+        - orderDetails
+      properties:
+        addressBookId:
+          type: integer
+          format: int64
+          description: 地址簿 ID（可选）
+          nullable: true
+          example: null
+        address:
+          type: string
+          description: 配送地址
+          example: 123 Main Street, New York, NY 10001
+        phone:
+          type: string
+          description: 联系电话
+          example: '+1234567890'
+        payMethod:
+          type: integer
+          description: 支付方式 - 1 = 信用卡，2 = 现金，3 = 钱包
+          enum: [1, 2, 3]
+          example: 1
+        remark:
+          type: string
+          description: 订单备注
+          nullable: true
+          example: No spicy, please
+        orderTime:
+          type: string
+          format: date-time
+          description: 订单时间 (yyyy-MM-dd HH:mm:ss)
+          example: '2026-04-03 10:30:00'
+        estimatedDeliveryTime:
+          type: string
+          format: date-time
+          description: 预计配送时间 (yyyy-MM-dd HH:mm:ss)
+          example: '2026-04-03 11:00:00'
+        deliveryStatus:
+          type: integer
+          description: 配送状态 - 1 = 立即配送，0 = 指定时间
+          enum: [0, 1]
+          example: 1
+        tablewareNumber:
+          type: integer
+          description: 餐具数量
+          example: 0
+        tablewareStatus:
+          type: integer
+          description: 餐具状态 - 1 = 按餐数提供，0 = 指定数量
+          enum: [0, 1]
+          example: 1
+        packAmount:
+          type: integer
+          description: 包装费
+          example: 0
+        amount:
+          type: number
+          format: decimal
+          description: 订单总金额
+          example: 35.50
+        orderDetails:
+          type: array
+          description: 订单菜品列表
+          items:
+            $ref: '#/components/schemas/OrderDetail'
+
+    OrderSubmitVO:
+      type: object
+      description: 订单提交响应
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 订单 ID
+          example: 1
+        orderNumber:
+          type: string
+          description: 订单号
+          example: '1712139000000'
+        money:
+          type: number
+          format: decimal
+          description: 订单金额
+          example: 35.50
+        orderTime:
+          type: string
+          format: date-time
+          description: 订单时间
+          example: '2026-04-03 10:30:00'
+
+    ResultOrderSubmitVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        msg:
+          type: string
+          nullable: true
+        data:
+          $ref: '#/components/schemas/OrderSubmitVO'
+
+    # 常数定义
+    PaymentMethod:
+      type: object
+      description: 支付方式
+      properties:
+        CREDIT_CARD:
+          type: integer
+          example: 1
+        CASH:
+          type: integer
+          example: 2
+        WALLET:
+          type: integer
+          example: 3
+
+    UserRole:
+      type: object
+      description: 用户角色
+      properties:
+        CUSTOMER:
+          type: integer
+          example: 0
+        MERCHANT:
+          type: integer
+          example: 1
+
+    DeliveryStatus:
+      type: object
+      description: 配送状态
+      properties:
+        IMMEDIATE:
+          type: integer
+          example: 1
+        SCHEDULED:
+          type: integer
+          example: 0

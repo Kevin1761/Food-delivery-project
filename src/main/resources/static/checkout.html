@@ -353,8 +353,21 @@
         return 1;
     }
 
+    function formatOrderTime() {
+        // Current order time in ISO 8601 format
+        const now = new Date();
+        const pad = (n) => (n < 10 ? '0' + n : '' + n);
+        const y = now.getFullYear();
+        const m = pad(now.getMonth() + 1);
+        const d = pad(now.getDate());
+        const hh = pad(now.getHours());
+        const mm = pad(now.getMinutes());
+        const ss = pad(now.getSeconds());
+        return `${y}-${m}-${d}T${hh}:${mm}:${ss}`;
+    }
+
     function formatEstimatedDeliveryTime() {
-        // Backend expects pattern yyyy-MM-dd HH:mm:ss
+        // Backend expects ISO 8601 format: yyyy-MM-dd'T'HH:mm:ss
         const now = new Date();
         const eta = new Date(now.getTime() + 30 * 60 * 1000); // +30 minutes by default
         const pad = (n) => (n < 10 ? '0' + n : '' + n);
@@ -364,7 +377,7 @@
         const hh = pad(eta.getHours());
         const mm = pad(eta.getMinutes());
         const ss = pad(eta.getSeconds());
-        return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+        return `${y}-${m}-${d}T${hh}:${mm}:${ss}`;
     }
 
     async function submitOrder(event) {
@@ -401,17 +414,28 @@
         const packAmount = 0; // You can change this if you charge packaging fee per item
         const amount = subtotal + packAmount;
 
+        // Build order details (dishes)
+        const orderDetails = items.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+        }));
+
         // Build DTO matching backend OrdersSubmitDTO
         const orderDto = {
-            addressBookId: null,                     // You can replace this with a real address book id
+            addressBookId: null,
             payMethod: mapPaymentMethod(paymentMethod),
             remark: note,
+            address: address,
+            phone: phone,
+            orderTime: formatOrderTime(),
             estimatedDeliveryTime: formatEstimatedDeliveryTime(),
-            deliveryStatus: 1,                       // 1 = send immediately
+            deliveryStatus: 1,
             tablewareNumber: 0,
-            tablewareStatus: 1,                      // 1 = provide by meal count
+            tablewareStatus: 1,
             packAmount: packAmount,
-            amount: amount
+            amount: amount,
+            orderDetails: orderDetails
         };
 
         statusEl.textContent = 'Submitting order, please wait...';
@@ -430,11 +454,34 @@
 
             const data = await resp.json();
             if (data && (data.code === 1 || data.code === 200 || data.success)) {
-                statusEl.textContent = 'Order placed successfully!';
+                statusEl.textContent = 'Order placed successfully! Redirecting...';
                 statusEl.className = 'status success';
+
                 try {
+                    // Get order info from response data
+                    const orderInfo = (data.data || data.result || {});
+                    
+                    // Build URL parameters for success page
+                    const urlParams = new URLSearchParams();
+                    if (orderInfo.id) urlParams.append('id', orderInfo.id);
+                    if (orderInfo.orderNumber) urlParams.append('orderNumber', orderInfo.orderNumber);
+                    if (orderInfo.money) urlParams.append('money', orderInfo.money);
+                    if (orderInfo.orderTime) urlParams.append('orderTime', orderInfo.orderTime);
+                    
+                    // Add order items
+                    urlParams.append('items', encodeURIComponent(JSON.stringify(items)));
+                    
                     localStorage.removeItem('checkoutCart');
-                } catch (_) {}
+                    
+                    setTimeout(() => {
+                        window.location.href = 'order-success.html?' + urlParams.toString();
+                    }, 800);
+                } catch (e) {
+                    console.error('Error processing order response:', e);
+                    setTimeout(() => {
+                        window.location.href = 'order-success.html';
+                    }, 800);
+                }
             } else {
                 statusEl.textContent = (data && (data.msg || data.message)) || 'Failed to place order. Please try again.';
                 statusEl.className = 'status error';

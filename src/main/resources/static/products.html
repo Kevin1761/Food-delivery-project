@@ -292,6 +292,94 @@
             color: #aaa;
             text-align: center;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+        .form-group {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #e3e4eb;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #16a34a;
+        }
+        .form-hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        .btn-recharge {
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #fff;
+            margin-top: 16px;
+        }
+        .modal-status {
+            margin-top: 12px;
+            font-size: 12px;
+            min-height: 18px;
+        }
+        .modal-status.error { color: #e53935; }
+        .modal-status.success { color: #16a34a; }
+        .modal-status.info { color: #6b7280; }
         @media (max-width: 600px) {
             .header { flex-direction: column; align-items: flex-start; gap: 6px; }
             .user-info { text-align: left; }
@@ -316,7 +404,9 @@
         </div>
         <div class="user-info">
             <div id="userEmail">Signed in as: Guest</div>
-            <button onclick="goToLogin()">Log out</button>
+            <div style="margin-top: 6px; font-size: 22px; font-weight: 600;">💰 Balance: <span id="userBalance">$0.00</span></div>
+            <button onclick="openRechargeModal()" style="margin-top: 6px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; border: none; padding: 4px 10px; border-radius: 999px; font-size: 12px; cursor: pointer;">Recharge</button>
+            <button onclick="goToLogin()" style="margin-top: 4px;">Log out</button>
         </div>
     </header>
 
@@ -362,6 +452,58 @@
     </div>
 
     <div class="footer">© 2026 FastFood Delivery · Products</div>
+</div>
+
+<!-- Recharge Modal -->
+<div id="rechargeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>💳 Wallet Recharge</span>
+            <button class="modal-close" onclick="closeRechargeModal()">×</button>
+        </div>
+        <form id="rechargeForm">
+            <div class="form-group">
+                <label for="rechargeCardNumber">Card number</label>
+                <input 
+                    id="rechargeCardNumber" 
+                    type="text" 
+                    placeholder="1234 5678 9012 3456" 
+                    maxlength="19"
+                    oninput="formatCardNumberRecharge(event)"
+                    required 
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="rechargeAmount">Recharge amount ($)</label>
+                <input 
+                    id="rechargeAmount" 
+                    type="number" 
+                    placeholder="50.00" 
+                    min="0.01"
+                    step="0.01"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                    required 
+                />
+                <div class="form-hint">Minimum: $0.01, Maximum: $10,000</div>
+            </div>
+
+            <div class="form-group">
+                <label for="rechargeCvv">CVV</label>
+                <input 
+                    id="rechargeCvv" 
+                    type="text" 
+                    placeholder="123" 
+                    maxlength="4"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    required 
+                />
+            </div>
+        </form>
+
+        <button class="btn-recharge" type="button" onclick="processRecharge()">Recharge Now</button>
+        <div id="rechargeStatus" class="modal-status"></div>
+    </div>
 </div>
 
 <script>
@@ -549,6 +691,93 @@
         document.getElementById('userEmail').textContent = 'Signed in as: ' + userEmail;
     }
 
+    function initBalance() {
+        let balance = parseFloat(localStorage.getItem('userBalance')) || 0;
+        document.getElementById('userBalance').textContent = '$' + balance.toFixed(2);
+    }
+
+    function openRechargeModal() {
+        document.getElementById('rechargeModal').classList.add('show');
+        document.getElementById('rechargeForm').reset();
+        document.getElementById('rechargeStatus').textContent = '';
+    }
+
+    function closeRechargeModal() {
+        document.getElementById('rechargeModal').classList.remove('show');
+    }
+
+    function formatCardNumberRecharge(event) {
+        let value = event.target.value.replace(/\s/g, '');
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formatted += ' ';
+            }
+            formatted += value[i];
+        }
+        event.target.value = formatted;
+    }
+
+    function processRecharge() {
+        const statusEl = document.getElementById('rechargeStatus');
+        const cardNum = document.getElementById('rechargeCardNumber').value.trim();
+        const amount = parseFloat(document.getElementById('rechargeAmount').value);
+        const cvv = document.getElementById('rechargeCvv').value.trim();
+
+        // Validation
+        if (!cardNum || !amount || !cvv) {
+            statusEl.textContent = 'Please fill in all fields.';
+            statusEl.className = 'modal-status error';
+            return;
+        }
+
+        if (cardNum.replace(/\s/g, '').length < 13) {
+            statusEl.textContent = 'Card number must be at least 13 digits.';
+            statusEl.className = 'modal-status error';
+            return;
+        }
+
+        if (amount < 0.01 || amount > 10000) {
+            statusEl.textContent = 'Recharge amount must be between $0.01 and $10,000.';
+            statusEl.className = 'modal-status error';
+            return;
+        }
+
+        if (cvv.length < 3) {
+            statusEl.textContent = 'CVV must be at least 3 digits.';
+            statusEl.className = 'modal-status error';
+            return;
+        }
+
+        statusEl.textContent = 'Processing recharge...';
+        statusEl.className = 'modal-status info';
+
+        setTimeout(() => {
+            // Add amount to balance
+            let currentBalance = parseFloat(localStorage.getItem('userBalance')) || 0;
+            let newBalance = currentBalance + amount;
+            localStorage.setItem('userBalance', newBalance.toString());
+            
+            // Update UI
+            document.getElementById('userBalance').textContent = '$' + newBalance.toFixed(2);
+            
+            statusEl.textContent = `Recharge successful! +$${amount.toFixed(2)}`;
+            statusEl.className = 'modal-status success';
+
+            setTimeout(() => {
+                closeRechargeModal();
+            }, 1500);
+        }, 1500);
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('rechargeModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeRechargeModal();
+        }
+    });
+
+    initBalance();
     loadProductsFromApi();
 </script>
 </body>

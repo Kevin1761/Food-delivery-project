@@ -41,3 +41,16 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `tableware_status` INT DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Order details table (dishes in each order)
+CREATE TABLE IF NOT EXISTS `order_details` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `order_id` BIGINT NOT NULL,
+  `dish_name` VARCHAR(255) NOT NULL,
+  `quantity` INT NOT NULL DEFAULT 1,
+  `price` DECIMAL(10,2) DEFAULT 0.00,
+  `create_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_order_id` (`order_id`),
+  CONSTRAINT `fk_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
