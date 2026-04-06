@@ -259,10 +259,9 @@
                 <div class="form-group">
                     <label for="paymentMethod">Payment method</label>
                     <select id="paymentMethod" name="paymentMethod">
-                        <option value="card">Credit / Debit Card</option>
                         <option value="cash">Cash on delivery</option>
-                        <option value="wallet">Wallet balance</option>
                     </select>
+                    <div class="hint">Cash on delivery is the only payment option currently available.</div>
                 </div>
                 <div class="form-group">
                     <label for="note">Order note (optional)</label>
@@ -345,12 +344,9 @@
     }
 
     function mapPaymentMethod(value) {
-        // Map front-end select value to backend payMethod int
-        // Adjust mapping according to your actual convention if needed
-        if (value === 'card') return 1;
+        // Checkout currently supports cash on delivery only.
         if (value === 'cash') return 2;
-        if (value === 'wallet') return 3;
-        return 1;
+        return 2;
     }
 
     function formatOrderTime() {
